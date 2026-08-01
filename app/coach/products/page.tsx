@@ -493,7 +493,7 @@ export default function CoachProductsPage() {
 
                   return (
                     <article key={product._id} className="h-full">
-                      <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-3 transition-all hover:border-indigo-200 hover:shadow-[0_14px_30px_-24px_rgba(79,70,229,0.55)]">
+                      <div className="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-3 transition-[border-color,box-shadow] duration-200 hover:border-indigo-200 hover:shadow-[0_14px_30px_-24px_rgba(79,70,229,0.55)]">
                         <div className="relative mb-3 h-[170px] overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
                           {product.imageUrl ? (
                             <Image

@@ -384,127 +384,72 @@ export default function PlatformFeeManagementPage() {
                 </h1>
               </div>
 
-              <div className="flex w-full flex-col gap-1.5 sm:w-auto sm:items-end sm:gap-2">
-                <div
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide sm:px-3 sm:py-1.5 sm:text-xs",
-                    statusMeta.pill
-                  )}
-                >
-                  <span className={cn("h-2 w-2 rounded-full", statusMeta.dot)} />
-                  {statusMeta.label}
-                </div>
-              </div>
+
             </div>
           </CardHeader>
         </Card>
 
-        <div className="mt-3 space-y-2">
-          <div className="rounded-xl border border-indigo-100/80 bg-white/80 px-4 py-3 shadow-sm sm:px-5 sm:py-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-indigo-500">
-              Platform fee
-            </p>
-            <div className="mt-1 flex items-end gap-2">
-              <p className="text-2xl font-semibold text-slate-900 sm:text-3xl">
-                {formatCurrency(subscription.platformFee)}
-              </p>
-              <span className="pb-0.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
-                per month
-              </span>
-            </div>
-            <p className="mt-1 text-xs text-slate-500">Renews every 30 days</p>
-          </div>
-
-          <div className="flex w-full justify-end">
-            <Button
-              type="button"
-              className="h-10 w-full justify-center gap-1.5 whitespace-nowrap rounded-xl !bg-emerald-500 px-3 text-sm font-semibold !text-white hover:!bg-emerald-600 sm:w-auto"
-              onClick={() => setShowPaymentForm(true)}
-            >
-              <CreditCard className="h-4 w-4 shrink-0" />
-              {pendingPayments.length > 0 ? "Submit another payment" : "Submit payment"}
-            </Button>
-          </div>
-        </div>
-      </motion.section>
-
-      {(isExpired || isNearExpiry) && (
-        <motion.section
-          variants={fadeInUp}
-          initial="initial"
-          animate="animate"
-          transition={{ duration: 0.28, delay: 0.04 }}
-        >
-          <Card
-            className={cn(
-              "border shadow-none",
-              isExpired
-                ? "border-rose-400/90 bg-gradient-to-r from-rose-100 via-rose-100 to-red-100"
-                : "border-amber-200 bg-amber-50/90"
-            )}
-          >
-            <CardContent className="flex flex-col items-stretch gap-3 px-4 pb-4 pt-4 sm:px-5 sm:py-4">
-              <div className="flex items-start gap-3">
+        <div className="mt-3 space-y-3">
+          <div className="rounded-2xl border border-slate-200 bg-white px-6 py-8 shadow-sm text-center">
+            {(isExpired || isNearExpiry) && (
+              <div className="mb-6 flex justify-center">
                 <div
                   className={cn(
-                    "mt-0.5 rounded-xl p-2",
-                    isExpired ? "bg-rose-200/80" : "bg-white/80"
+                    "inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold",
+                    isExpired
+                      ? "bg-rose-100/80 text-rose-800"
+                      : "bg-amber-100/80 text-amber-800"
                   )}
                 >
-                  {isExpired ? (
-                    <AlertCircle className="h-5 w-5 text-rose-700" />
-                  ) : (
-                    <Clock className="h-5 w-5 text-amber-600" />
-                  )}
-                </div>
-                <div className="space-y-1">
-                  <p
+                  <div
                     className={cn(
-                      "text-sm font-semibold",
-                      isExpired ? "text-rose-900" : "text-slate-900"
+                      "rounded-full p-1",
+                      isExpired ? "bg-rose-200/80 text-rose-700" : "bg-amber-200/80 text-amber-700"
                     )}
                   >
-                    {isExpired
-                      ? "Subscription expired"
-                      : `Subscription expires in ${subscription.daysRemaining} day${
-                          subscription.daysRemaining !== 1 ? "s" : ""
-                        }`}
-                  </p>
-                  <p
-                    className={cn(
-                      "text-sm",
-                      isExpired ? "text-rose-800" : "text-slate-600"
+                    {isExpired ? (
+                      <AlertCircle className="h-4 w-4" />
+                    ) : (
+                      <Clock className="h-4 w-4" />
                     )}
-                  >
-                    Pay {formatCurrency(subscription.platformFee)} to keep uninterrupted access to your coach tools.
-                  </p>
+                  </div>
+                  {isExpired
+                    ? "Subscription Expired"
+                    : `Expires in ${subscription.daysRemaining} day${
+                        subscription.daysRemaining !== 1 ? "s" : ""
+                      }`}
                 </div>
               </div>
+            )}
+            
+            <p className="text-xs font-semibold uppercase tracking-widest text-indigo-500 mb-4">
+              Platform fee
+            </p>
+            <p className="text-6xl font-bold text-slate-900 sm:text-7xl">
+              {formatCurrency(subscription.platformFee)}
+            </p>
+            <p className="mt-3 text-base font-semibold uppercase tracking-wide text-slate-500">
+              Per Month
+            </p>
+            <p className="mt-1.5 text-sm text-slate-400">Renews every 30 days</p>
+          </div>
 
-              <Button
-                type="button"
-                size="sm"
-                onClick={() => setShowPaymentForm(true)}
-                className={cn(
-                  "h-10 w-full font-semibold",
-                  isExpired
-                    ? "!bg-rose-600 !text-white hover:!bg-rose-700"
-                    : "!bg-emerald-600 !text-white hover:!bg-emerald-700"
-                )}
-              >
-                {isExpired ? "Renew now" : "Pay now"}
-              </Button>
-            </CardContent>
-          </Card>
-        </motion.section>
-      )}
+          <Button
+            type="button"
+            className="h-12 w-full justify-center gap-2 rounded-xl !bg-emerald-500 px-6 text-base font-bold tracking-wide !text-white hover:!bg-emerald-600 shadow-sm"
+            onClick={() => setShowPaymentForm(true)}
+          >
+            <CreditCard className="h-5 w-5 shrink-0" />
+            {pendingPayments.length > 0 ? "Submit another payment" : "Submit payment"}
+          </Button>
+        </div>
+      </motion.section>
 
       <motion.section
         variants={fadeInUp}
         initial="initial"
         animate="animate"
         transition={{ duration: 0.28, delay: 0.08 }}
-        className="grid gap-4 lg:grid-cols-2"
       >
         <Card>
           <CardHeader className="pb-3">
@@ -512,98 +457,30 @@ export default function PlatformFeeManagementPage() {
               <span className="grid h-8 w-8 place-items-center rounded-lg bg-indigo-50 text-indigo-600">
                 <TrendingUp className="h-4 w-4" />
               </span>
-              Payment snapshot
+              Remaining days
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3">
-                <p className="text-xs text-slate-500">Current balance status</p>
-                <p className={cn("mt-1 text-lg font-semibold", daysRemainingTone)}>
-                  {subscription.daysRemaining} day{subscription.daysRemaining !== 1 ? "s" : ""}
-                </p>
-                <p className="text-xs text-slate-500">
+            <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-5 flex items-end justify-between gap-4">
+              <div className="pb-0.5">
+                <p className="text-sm font-medium text-slate-500">Current balance status</p>
+                <p className="mt-2 text-sm font-medium text-slate-700">
                   {subscription.status === "trial"
                     ? `Trial ends on ${formatDate(subscription.trialEndsAt)}`
                     : `Expires on ${formatDate(subscription.subscriptionExpiresAt)}`}
                 </p>
               </div>
-
-              <div className="rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-3">
-                <p className="text-xs text-slate-500">Last payment</p>
-                <p className="mt-1 text-lg font-semibold text-slate-900">
-                  {subscription.lastPaymentDate ? formatDate(subscription.lastPaymentDate) : "Not available"}
+              <div className="flex flex-col items-center justify-end">
+                <p className={cn("text-4xl font-bold sm:text-5xl leading-none", daysRemainingTone)}>
+                  {subscription.daysRemaining}
+                </p>
+                <p className={cn("text-[10px] sm:text-xs font-bold uppercase tracking-widest mt-2", daysRemainingTone)}>
+                  day{subscription.daysRemaining !== 1 ? "s" : ""}
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3">
-                <p className="text-xs text-emerald-700">Approved</p>
-                <p className="mt-1 text-lg font-semibold text-emerald-800">{approvedPayments.length}</p>
-              </div>
 
-              <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-3">
-                <p className="text-xs text-amber-700">Pending / Rejected</p>
-                <p className="mt-1 text-lg font-semibold text-amber-800">
-                  {pendingPayments.length} / {rejectedPayments.length}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-50 text-emerald-600">
-                <UserPlus2 className="h-4 w-4" />
-              </span>
-              Referral benefit
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="rounded-xl border border-emerald-100 bg-emerald-50/70 px-3 py-2">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-600">Info</p>
-              <p className="mt-1 text-sm text-emerald-700">
-                Earn +10 days when a referred coach completes their first approved subscription payment.
-              </p>
-            </div>
-            {profile?.coachCode ? (
-              <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-                      Referral code
-                    </p>
-                    <p className="mt-1 font-mono text-base font-semibold text-slate-800">
-                      {profile.coachCode}
-                    </p>
-                  </div>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    className="shrink-0"
-                    onClick={async () => {
-                      try {
-                        await navigator.clipboard.writeText(profile.coachCode ?? "");
-                        toast.success("Referral code copied");
-                      } catch {
-                        toast.error("Unable to copy right now");
-                      }
-                    }}
-                  >
-                    <Copy className="h-3.5 w-3.5" />
-                    Copy
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <p className="text-sm text-slate-500">
-                Your referral code will appear here once available.
-              </p>
-            )}
           </CardContent>
         </Card>
       </motion.section>
@@ -615,15 +492,64 @@ export default function PlatformFeeManagementPage() {
         transition={{ duration: 0.28, delay: 0.12 }}
       >
         <Card>
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-3 border-b border-slate-100">
             <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-indigo-50 text-indigo-600">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-50 text-emerald-600">
                 <UserPlus2 className="h-4 w-4" />
               </span>
-              Referral tracking
+              Referrals
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-6 pt-4">
+            <div className="space-y-3">
+              <h3 className="text-sm font-semibold text-slate-800">Referral benefit</h3>
+              <div className="rounded-xl border border-emerald-100 bg-emerald-50/70 px-3 py-2">
+                <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-600">Info</p>
+                <p className="mt-1 text-sm text-emerald-700">
+                  Earn +10 days when a referred coach completes their first approved subscription payment.
+                </p>
+              </div>
+              {profile?.coachCode ? (
+                <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+                        Referral code
+                      </p>
+                      <p className="mt-1 font-mono text-base font-semibold text-slate-800">
+                        {profile.coachCode}
+                      </p>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      className="shrink-0"
+                      onClick={async () => {
+                        try {
+                          await navigator.clipboard.writeText(profile.coachCode ?? "");
+                          toast.success("Referral code copied");
+                        } catch {
+                          toast.error("Unable to copy right now");
+                        }
+                      }}
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                      Copy
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-sm text-slate-500">
+                  Your referral code will appear here once available.
+                </p>
+              )}
+            </div>
+
+            <div className="h-px w-full bg-slate-100" />
+
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-slate-800">Referral tracking</h3>
             {!subscription.isValid ? (
               <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-6 text-sm text-slate-600">
                 Referral stats are available once your subscription is active.
@@ -701,6 +627,7 @@ export default function PlatformFeeManagementPage() {
                 )}
               </>
             )}
+            </div>
           </CardContent>
         </Card>
       </motion.section>
@@ -746,79 +673,38 @@ export default function PlatformFeeManagementPage() {
                 </p>
               </div>
             ) : (
-              <div className="overflow-x-auto rounded-xl border border-slate-200">
-                <table className="admin-table min-w-[780px]">
-                  <thead>
-                    <tr>
-                      <th>Submitted</th>
-                      <th>Amount</th>
-                      <th>Transaction ID</th>
-                      <th>Status</th>
-                      <th>Valid till</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {paymentHistory.map((payment) => (
-                      <tr key={payment._id}>
-                        <td className="align-top">
-                          <div className="flex flex-col gap-0.5">
-                            <span className="whitespace-nowrap font-semibold text-slate-900">
-                              {formatDate(payment.paidAt)}
-                            </span>
-                            <span className="whitespace-nowrap text-xs text-slate-500">
-                              {new Date(payment.paidAt)
-                                .toLocaleTimeString("en-IN", {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  hour12: true,
-                                })
-                                .toUpperCase()}
-                            </span>
-                          </div>
-                        </td>
-                        <td style={{ fontWeight: 700, color: "#0f172a" }}>
-                          {formatCurrency(payment.amount)}
-                        </td>
-                        <td>
-                          <span
-                            style={{
-                              fontFamily: "monospace",
-                              fontSize: "0.82rem",
-                              backgroundColor: "#f1f5f9",
-                              padding: "0.25rem 0.5rem",
-                              borderRadius: "0.4rem",
-                              whiteSpace: "nowrap",
-                            }}
-                          >
-                            {payment.transactionId || "-"}
-                          </span>
-                        </td>
-                        <td>{getPaymentBadge(payment.status)}</td>
-                        <td className="align-top">
-                          {payment.validUntil ? (
-                            <span className="whitespace-nowrap font-semibold text-slate-900">
-                              {formatDate(payment.validUntil)}
-                            </span>
-                          ) : (
-                            "-"
-                          )}
-                        </td>
-                        <td>
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setSelectedPayment(payment)}
-                          >
-                            <Eye className="h-3.5 w-3.5" />
-                            Details
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="divide-y divide-slate-100 rounded-xl border border-slate-200 overflow-hidden">
+                {paymentHistory.map((payment) => (
+                  <div
+                    key={payment._id}
+                    className="flex items-center justify-between px-4 py-3 hover:bg-slate-50/70 transition-colors"
+                  >
+                    <div className="flex flex-col gap-0.5">
+                      <span className="text-sm font-semibold text-slate-900 whitespace-nowrap">
+                        {formatDate(payment.paidAt)}
+                      </span>
+                      <span className="text-xs text-slate-500 whitespace-nowrap">
+                        {new Date(payment.paidAt)
+                          .toLocaleTimeString("en-IN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })
+                          .toUpperCase()}
+                      </span>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setSelectedPayment(payment)}
+                      className="shrink-0"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      Details
+                    </Button>
+                  </div>
+                ))}
               </div>
             )}
           </CardContent>

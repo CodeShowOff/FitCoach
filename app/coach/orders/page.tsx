@@ -8,6 +8,8 @@ import axios from "axios";
 import { Download, Package, User, CreditCard, CheckCircle, XCircle, ExternalLink, ChevronDown, ChevronUp, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import CompactPagination from "@/components/shared/CompactPagination";
+import { motion } from "@/lib/motion";
+import { Card, CardHeader, CardDescription } from "@/components/ui/card";
 
 type CoachOrderStatus =
   | "pending"
@@ -51,6 +53,11 @@ interface CoachOrdersResponse {
 }
 
 const ORDERS_PER_PAGE = 5;
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+};
 
 function statusColor(status: CoachOrderStatus) {
   switch (status) {
@@ -195,10 +202,26 @@ export default function CoachOrdersPage() {
   );
 
   return (
-    <div>
-      <section className="admin-page-header">
-        <h1 className="admin-page-header__title coach-page-header__title">Orders</h1>
-      </section>
+    <div className="space-y-5 pt-4 md:pt-6">
+      <motion.section
+        variants={fadeInUp}
+        initial="initial"
+        animate="animate"
+        transition={{ duration: 0.28 }}
+      >
+        <Card className="overflow-hidden border-indigo-100/70 bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-600 text-white">
+          <CardHeader className="gap-3 p-4 sm:p-6">
+            <div className="space-y-2">
+              <h1 className="text-lg font-bold tracking-tight text-white sm:text-3xl">
+                Client Orders
+              </h1>
+              <CardDescription className="hidden max-w-2xl text-sm !text-white/90 sm:block sm:text-base">
+                Manage and track all product orders placed by your clients.
+              </CardDescription>
+            </div>
+          </CardHeader>
+        </Card>
+      </motion.section>
 
       {orders.length ? (
         <>

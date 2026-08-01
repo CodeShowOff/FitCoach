@@ -103,43 +103,34 @@ export default function CoachPlansPage() {
               Plan Templates
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 lg:grid-cols-2">
+          <CardContent className="grid gap-2">
             {[
               {
                 title: "Workout Plans",
                 description: "Create and manage workout templates.",
                 href: "/coach/workout-plans",
-                cta: "Manage Workouts",
                 Icon: Dumbbell,
               },
               {
                 title: "Diet Plans",
                 description: "Create and manage diet plans.",
                 href: "/coach/diet-plans",
-                cta: "Manage Diet Plans",
                 Icon: Utensils,
               },
             ].map((item) => (
-              <motion.div key={item.title} whileHover={{ y: -4 }} transition={{ duration: 0.18 }}>
-                <Card className="h-full group">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
-                      <span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-indigo-600 shadow-sm transition-colors group-hover:text-violet-600">
-                        <item.Icon className="h-5 w-5" />
-                      </span>
-                      {item.title}
-                    </CardTitle>
-                    <CardDescription>{item.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <Link href={item.href} className="block w-full">
-                      <Button variant="default" className="h-11 w-full justify-between rounded-xl px-4 text-base font-semibold">
-                        {item.cta}
-                        <ArrowRight className="h-5 w-5" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+              <motion.div key={item.title} whileHover={{ x: 4 }} transition={{ duration: 0.18 }}>
+                <Link href={item.href} className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-slate-50 group">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-100 group-hover:text-blue-700">
+                    <item.Icon className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <h3 className="font-semibold text-slate-900 text-base">{item.title}</h3>
+                    <p className="text-sm text-slate-500">{item.description}</p>
+                  </div>
+                  <div className="ml-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-400 transition-colors group-hover:border-blue-600 group-hover:bg-blue-600 group-hover:text-white">
+                    <ArrowRight className="h-5 w-5" />
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </CardContent>
@@ -161,43 +152,34 @@ export default function CoachPlansPage() {
               Custom Library
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid gap-4 md:grid-cols-2">
+          <CardContent className="grid gap-2">
             {[
               {
                 title: "Custom Exercises",
                 description: "Manage your private exercise library.",
                 href: "/coach/exercises",
-                cta: "Manage Exercises",
                 Icon: BicepsFlexed,
               },
               {
                 title: "Custom Food Items",
                 description: "Manage your private food library.",
                 href: "/coach/food-items",
-                cta: "Manage Food Items",
                 Icon: Salad,
               },
             ].map((item) => (
-              <motion.div key={item.title} whileHover={{ y: -4 }} transition={{ duration: 0.18 }}>
-                <Card className="h-full group">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-lg sm:text-xl">
-                      <span className="grid h-10 w-10 place-items-center rounded-xl bg-white text-indigo-600 shadow-sm transition-colors group-hover:text-violet-600">
-                        <item.Icon className="h-5 w-5" />
-                      </span>
-                      {item.title}
-                    </CardTitle>
-                    <CardDescription>{item.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <Link href={item.href} className="block w-full">
-                      <Button variant="default" className="h-11 w-full justify-between rounded-xl px-4 text-base font-semibold">
-                        {item.cta}
-                        <ArrowRight className="h-5 w-5" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
+              <motion.div key={item.title} whileHover={{ x: 4 }} transition={{ duration: 0.18 }}>
+                <Link href={item.href} className="flex items-center gap-4 rounded-xl p-3 transition-colors hover:bg-slate-50 group">
+                  <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600 transition-colors group-hover:bg-emerald-100 group-hover:text-emerald-700">
+                    <item.Icon className="h-6 w-6" />
+                  </span>
+                  <div>
+                    <h3 className="font-semibold text-slate-900 text-base">{item.title}</h3>
+                    <p className="text-sm text-slate-500">{item.description}</p>
+                  </div>
+                  <div className="ml-auto flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white border border-slate-200 text-slate-400 transition-colors group-hover:border-emerald-600 group-hover:bg-emerald-600 group-hover:text-white">
+                    <ArrowRight className="h-5 w-5" />
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </CardContent>
