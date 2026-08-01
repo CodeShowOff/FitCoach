@@ -48,7 +48,7 @@ const ClientStats = React.memo(function ClientStats() {
   const kpis = useMemo(() => [
     {
       label: "Weight",
-      title: "Latest Weight (kg)",
+      title: "Latest Weight",
       value: stats?.latestWeight != null ? stats.latestWeight : "--",
       Icon: Scale,
       tone: "from-blue-500 to-indigo-500"

@@ -220,6 +220,10 @@ export default function ClientSubscriptionsPage() {
                 >
                   {currentPlan.subscription.status || "active"}
                 </span>
+              ) : currentPlan?.type === "default" ? (
+                <Badge variant="secondary" className="h-7 rounded-full px-2.5 text-[11px] normal-case tracking-normal">
+                  Assigned automatically
+                </Badge>
               ) : null}
             </div>
           </CardHeader>
@@ -271,13 +275,9 @@ export default function ClientSubscriptionsPage() {
                       <p className="text-[10px] uppercase tracking-[0.02em] text-slate-500">Plan</p>
                       <p className="truncate text-lg font-semibold text-slate-900">{currentPlan.plan.title}</p>
                     </div>
-
-                    <Badge variant="secondary" className="h-7 rounded-full px-2.5 text-[11px] normal-case tracking-normal">
-                      Assigned automatically
-                    </Badge>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 border-y border-slate-200 py-3">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-3 border-t border-slate-200 pt-3 pb-1">
                     <div>
                       <p className="text-[10px] uppercase tracking-[0.02em] text-slate-500">Dur.</p>
                       <p className="mt-0.5 font-semibold text-slate-900">
@@ -292,6 +292,15 @@ export default function ClientSubscriptionsPage() {
                       </p>
                     </div>
                   </div>
+
+                  {currentPlan.plan.goal && (
+                    <div className="border-t border-slate-200 pt-3">
+                      <p className="text-[10px] uppercase tracking-[0.02em] text-slate-500">Goal</p>
+                      <p className="mt-0.5 font-semibold text-slate-900 capitalize">
+                        {currentPlan.plan.goal}
+                      </p>
+                    </div>
+                  )}
 
                 </>
               )

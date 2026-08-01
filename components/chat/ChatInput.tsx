@@ -45,28 +45,6 @@ export default function ChatInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Auto-focus textarea on mount and when conversation changes
-  useEffect(() => {
-    const focusInput = () => {
-      if (textareaRef.current && !showLinkInput) {
-        textareaRef.current.focus();
-      }
-    };
-    
-    // Immediate focus
-    focusInput();
-    
-    // Also try after delays for both mobile and desktop
-    const timer1 = setTimeout(focusInput, 50);
-    const timer2 = setTimeout(focusInput, 150);
-    const timer3 = setTimeout(focusInput, 300);
-    
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
-    };
-  }, [showLinkInput]);
 
   // Auto-resize textarea
   useEffect(() => {

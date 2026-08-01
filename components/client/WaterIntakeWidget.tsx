@@ -248,7 +248,10 @@ export default function WaterIntakeWidget({ compact = false }: WaterIntakeWidget
       >
         <div 
           className="absolute inset-0 bg-cover bg-center pointer-events-none z-0" 
-          style={{ backgroundImage: "url('/images/dashboard/bg-water-mono.webp')" }}
+          style={{ 
+            backgroundImage: "url('/images/dashboard/bg-weight-mono.webp')",
+            transform: "scaleX(-1)"
+          }}
         />
         <div className="absolute inset-0 bg-white/40 pointer-events-none z-[1]" />
         {!compact ? (

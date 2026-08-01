@@ -39,7 +39,18 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 				cacheName: 'image-cache',
 				expiration: {
 					maxEntries: 100,
-					maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+					maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+				},
+			},
+		},
+		{
+			urlPattern: /\/_next\/image\?url=.*/i,
+			handler: 'StaleWhileRevalidate',
+			options: {
+				cacheName: 'next-image-cache',
+				expiration: {
+					maxEntries: 200,
+					maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
 				},
 			},
 		},
@@ -54,6 +65,7 @@ const nextConfig = {
 		// Keep defaults; no experimental flags needed right now
 	},
 	images: {
+		minimumCacheTTL: 2592000, // 30 days cache for optimized images
 		// Allow Cloudinary hosted images (QR codes, avatars, etc.)
 		remotePatterns: [
 			{

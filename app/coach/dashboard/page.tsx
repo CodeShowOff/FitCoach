@@ -502,11 +502,6 @@ export default function CoachDashboard() {
                       <p className="text-sm text-slate-500">No clients yet.</p>
                     ) : (
                       <div className="divide-y divide-slate-200/80">
-                        <div className="flex items-center justify-between px-1 text-xs uppercase tracking-wide text-slate-500">
-                          <span>Name</span>
-                          <span>Chat</span>
-                        </div>
-
                         {(clients ?? []).map((client) => (
                           <div
                             key={client._id}
