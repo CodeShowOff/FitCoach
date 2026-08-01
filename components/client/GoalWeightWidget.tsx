@@ -267,7 +267,7 @@ export default function GoalWeightWidget({ compact = false }: GoalWeightWidgetPr
       };
 
   const ringSize = compact ? "h-36 w-36" : "h-[min(74vw,15rem)] w-[min(74vw,15rem)] sm:h-64 sm:w-64";
-  const ringStrokeWidth = compact ? 15 : 19;
+  const ringStrokeWidth = compact ? 18 : 24;
   const shouldReduceEffects = compact;
   const ringCenter = 120;
   const ringRadius = 94;
@@ -283,15 +283,19 @@ export default function GoalWeightWidget({ compact = false }: GoalWeightWidgetPr
   return (
     <>
       <div
-        className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br from-orange-50/35 via-white to-emerald-50/35 ${
+        className={`relative overflow-hidden rounded-2xl border bg-cover bg-center ${
           shouldReduceEffects
             ? "shadow-[0_10px_20px_-18px_rgba(15,23,42,0.28)]"
             : "shadow-[0_20px_40px_-30px_rgba(15,23,42,0.35)]"
         } ${
           compact ? "h-full p-3" : "p-4 sm:p-5"
         }`}
-        style={{ borderColor: tone.border }}
+        style={{ 
+          borderColor: tone.border,
+          backgroundImage: "url('/images/dashboard/bg-weight-mono.webp')"
+        }}
       >
+        <div className="absolute inset-0 bg-white/50 pointer-events-none z-0" />
         {!compact ? (
           <>
             <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-sky-200/30 blur-3xl" />
@@ -314,7 +318,10 @@ export default function GoalWeightWidget({ compact = false }: GoalWeightWidgetPr
                 className={`mx-auto ${ringSize} rounded-full border border-slate-200/70 ${compact ? "" : "animate-pulse"}`}
                 style={{ borderWidth: ringStrokeWidth }}
               />
-              <div>
+              <div
+                className="pt-2 text-center"
+                style={{ borderTopWidth: 1, borderTopStyle: "solid", borderTopColor: tone.border }}
+              >
                 <div className={`h-[58px] rounded-xl bg-slate-200/75 ${compact ? "" : "animate-pulse"}`} />
               </div>
             </div>
@@ -411,7 +418,7 @@ export default function GoalWeightWidget({ compact = false }: GoalWeightWidgetPr
               </div>
 
               <div
-                className={`pt-2 ${compact ? "text-center" : "text-left"}`}
+                className="pt-2 text-center"
                 style={{ borderTopWidth: 1, borderTopStyle: "solid", borderTopColor: tone.border }}
               >
                 <div className="min-w-0">

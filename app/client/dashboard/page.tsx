@@ -3,14 +3,9 @@
 
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import {
-  BookOpenText,
-  Calculator,
-  Dumbbell,
-  UserCircle2,
-  Utensils,
-} from "lucide-react";
+import { UserCircle2 } from "lucide-react";
 import { useMyCoachQuery } from "@/lib/queries/coach";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
@@ -18,39 +13,32 @@ import WaterIntakeWidget from "@/components/client/WaterIntakeWidget";
 import GoalWeightWidget from "@/components/client/GoalWeightWidget";
 import { cn } from "@/lib/utils";
 
-const todayCoreActions = [
+const dashboardActions = [
   {
     title: "Today's Workout",
-    description: "Open your workout plan and track execution quickly.",
     href: "/client/workouts/today",
-    Icon: Dumbbell,
-    iconTone: "from-orange-500 to-amber-500",
+    image: "/images/dashboard/client-workout.webp",
+    imageAlt: "A sleek modern kettlebell and a folded gym towel on a vibrant orange background",
   },
   {
     title: "Today's Diet",
-    description: "Follow your current meal plan and stay consistent with intake.",
     href: "/client/diet/today",
-    Icon: Utensils,
-    iconTone: "from-emerald-500 to-lime-500",
+    image: "/images/dashboard/client-diet.webp",
+    imageAlt: "A healthy, colorful meal prep bowl on a fresh lime green background",
   },
-] as const;
-
-const quickActions = [
   {
     title: "Nutrition Index",
     href: "/indian-nutrition-index",
-    Icon: BookOpenText,
-    iconTone: "from-cyan-500 to-sky-500",
+    image: "/images/dashboard/client-nutrition.webp",
+    imageAlt: "An open, modern health encyclopedia and a shiny red apple on a cyan background",
   },
   {
     title: "Calorie Calculator",
     href: "/calorie-calculator",
-    Icon: Calculator,
-    iconTone: "from-indigo-500 to-blue-500",
+    image: "/images/dashboard/client-calories.webp",
+    imageAlt: "A modern digital scale and a measuring tape on a vivid indigo background",
   },
 ] as const;
-
-const dashboardActions = [...todayCoreActions, ...quickActions] as const;
 
 function QuickStatsLoadingContent() {
   return (
@@ -204,31 +192,29 @@ export default function ClientDashboardPage() {
       </section>
 
       <section>
-        <div className="grid grid-cols-2 items-stretch overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {dashboardActions.map((item, index) => (
             <Link
               key={item.title}
               href={item.href}
-              className={cn(
-                "block h-full min-h-[136px] cursor-pointer select-none p-2.5 hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2 md:min-h-[148px] md:p-3",
-                index % 2 === 1 && "border-l border-slate-200/80",
-                index >= 2 && "border-t border-slate-200/80"
-              )}
+              className="group block h-full cursor-pointer select-none overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_38px_rgba(15,23,42,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2"
             >
-              <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-center">
-                <span
-                  className={cn(
-                    "grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md",
-                    item.iconTone
-                  )}
-                >
-                  <item.Icon className="h-7 w-7" />
-                </span>
-
-                <h2 className="mt-1 text-sm font-semibold leading-tight text-slate-900 md:text-base">
-                  {item.title}
-                </h2>
-              </div>
+              <article className="flex h-full min-h-[164px] flex-col">
+                <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 sm:aspect-[21/9] xl:aspect-[3/1]">
+                  <Image
+                    src={item.image}
+                    alt={item.imageAlt}
+                    fill
+                    sizes="(max-width: 639px) calc(50vw - 1.25rem), (max-width: 1279px) calc(50vw - 2rem), 50vw"
+                    className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.035]"
+                  />
+                </div>
+                <div className="flex min-h-[62px] flex-1 flex-col justify-center px-3 py-2.5 sm:min-h-[82px] sm:px-5 sm:py-4">
+                  <h2 className="text-sm font-bold tracking-tight text-slate-950 sm:text-lg">
+                    {item.title}
+                  </h2>
+                </div>
+              </article>
             </Link>
           ))}
         </div>

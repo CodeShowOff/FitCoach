@@ -66,11 +66,11 @@ const STATUS_FILTER_OPTIONS: Array<{ value: "" | ContactStatus; label: string }>
   { value: "rejected", label: "Rejected" },
 ];
 
-const STATUS_BADGE_CLASS: Record<ContactStatus, string> = {
-  pending: "border-amber-200 bg-amber-50 text-amber-700",
-  contacted: "border-blue-200 bg-blue-50 text-blue-700",
-  converted: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  rejected: "border-rose-200 bg-rose-50 text-rose-700",
+const STATUS_BADGE_VARIANT: Record<ContactStatus, "warning" | "default" | "success" | "danger" | "secondary"> = {
+  pending: "warning",
+  contacted: "default",
+  converted: "success",
+  rejected: "danger",
 };
 
 const fadeInUp = {
@@ -319,11 +319,8 @@ export default function ReceivedRequestsPage() {
                           </div>
 
                           <Badge
-                            variant="secondary"
-                            className={cn(
-                              "px-2 py-0.5 text-[10px] normal-case tracking-normal",
-                              STATUS_BADGE_CLASS[request.status]
-                            )}
+                            variant={STATUS_BADGE_VARIANT[request.status]}
+                            className="px-2 py-0.5 text-[10px] normal-case tracking-normal"
                           >
                             {request.status}
                           </Badge>

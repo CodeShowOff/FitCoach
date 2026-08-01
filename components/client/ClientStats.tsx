@@ -2,82 +2,37 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
+import React, { useMemo } from "react";
 import {
   CLIENT_PROGRESS_SUMMARY_QUERY_KEY,
   fetchClientProgressSummary,
 } from "@/lib/queries/clientProgress";
+import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+import { Scale, Ruler, HeartPulse } from "lucide-react";
 
 function QuickStatsSkeleton() {
   return (
     <section>
-      <div style={{ marginBottom: "1rem" }}>
-        <h3
-          style={{
-            fontSize: "1rem",
-            fontWeight: "700",
-            color: "#111827",
-            margin: "0",
-          }}
-        >
-          Quick Stats
-        </h3>
+      <div className="mb-4">
+        <h3 className="m-0 text-base font-bold text-slate-900">Quick Stats</h3>
       </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "1rem",
-        }}
-      >
-        <div
-          style={{
-            background: "linear-gradient(135deg, #dbeafe 0%, #eff6ff 70%, #ffffff 100%)",
-            borderRadius: "1rem",
-            border: "1px solid #bfdbfe",
-            padding: "1.25rem",
-            boxShadow: "0 4px 12px rgba(37, 99, 235, 0.1)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "#3b82f6" }} />
-            <div style={{ height: "12px", width: "120px", borderRadius: "999px", background: "#cbd5e1" }} />
+      <div className="divide-y divide-slate-200/80 border-t border-slate-200/80">
+        {[1, 2, 3].map((i) => (
+          <div
+            key={i}
+            className="flex min-h-[96px] items-center justify-between gap-4 py-4 sm:min-h-[112px] sm:py-5"
+          >
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-slate-100 sm:h-14 sm:w-14" />
+              <div className="min-w-0 space-y-2">
+                <div className="h-3 w-16 rounded bg-slate-200" />
+                <div className="h-4 w-24 rounded bg-slate-200" />
+              </div>
+            </div>
+            <div className="h-8 w-16 rounded bg-slate-200" />
           </div>
-          <div style={{ height: "34px", width: "110px", borderRadius: "10px", background: "#cbd5e1" }} />
-        </div>
-
-        <div
-          style={{
-            background: "linear-gradient(135deg, #dcfce7 0%, #f0fdf4 70%, #ffffff 100%)",
-            borderRadius: "1rem",
-            border: "1px solid #bbf7d0",
-            padding: "1.25rem",
-            boxShadow: "0 4px 12px rgba(34, 197, 94, 0.1)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "#22c55e" }} />
-            <div style={{ height: "12px", width: "110px", borderRadius: "999px", background: "#cbd5e1" }} />
-          </div>
-          <div style={{ height: "34px", width: "90px", borderRadius: "10px", background: "#cbd5e1" }} />
-        </div>
-
-        <div
-          style={{
-            background: "linear-gradient(135deg, #fef3c7 0%, #fffbeb 70%, #ffffff 100%)",
-            borderRadius: "1rem",
-            border: "1px solid #fcd34d",
-            padding: "1.25rem",
-            boxShadow: "0 4px 12px rgba(217, 119, 6, 0.1)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <div style={{ width: "40px", height: "40px", borderRadius: "10px", background: "#f59e0b" }} />
-            <div style={{ height: "12px", width: "132px", borderRadius: "999px", background: "#cbd5e1" }} />
-          </div>
-          <div style={{ height: "34px", width: "128px", borderRadius: "10px", background: "#cbd5e1" }} />
-        </div>
+        ))}
       </div>
     </section>
   );
@@ -90,164 +45,66 @@ const ClientStats = React.memo(function ClientStats() {
     staleTime: 60 * 1000,
   });
 
+  const kpis = useMemo(() => [
+    {
+      label: "Weight",
+      title: "Latest Weight (kg)",
+      value: stats?.latestWeight != null ? stats.latestWeight : "--",
+      Icon: Scale,
+      tone: "from-blue-500 to-indigo-500"
+    },
+    {
+      label: "BMI",
+      title: "Latest BMI",
+      value: stats?.latestBMI != null ? stats.latestBMI : "--",
+      Icon: Ruler,
+      tone: "from-emerald-500 to-teal-500"
+    },
+    {
+      label: "Health",
+      title: "Metabolic Age",
+      value: stats?.latestMetabolicAge != null ? stats.latestMetabolicAge : "--",
+      Icon: HeartPulse,
+      tone: "from-rose-500 to-pink-500"
+    }
+  ], [stats]);
+
   if (isLoading) return <QuickStatsSkeleton />;
 
   return (
     <section>
-      <div style={{ marginBottom: "1rem" }}>
-        <h3 style={{ 
-          fontSize: "1rem", 
-          fontWeight: "700", 
-          color: "#111827",
-          margin: "0"
-        }}>
-          Quick Stats
-        </h3>
+      <div className="mb-4">
+        <h3 className="m-0 text-base font-bold text-slate-900">Quick Stats</h3>
       </div>
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-        gap: "1rem"
-      }}>
-        <div style={{
-          background: "linear-gradient(135deg, #dbeafe 0%, #eff6ff 70%, #ffffff 100%)",
-          borderRadius: "1rem",
-          border: "1px solid #bfdbfe",
-          padding: "1.25rem",
-          boxShadow: "0 4px 12px rgba(37, 99, 235, 0.1)",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <div style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #3b82f6, #2563eb)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1.25rem"
-            }}>
-              ⚖️
+      <div className="divide-y divide-slate-200/80 border-t border-slate-200/80">
+        {kpis.map((item) => (
+          <div
+            key={item.title}
+            className="flex min-h-[96px] items-center justify-between gap-4 py-4 sm:min-h-[112px] sm:py-5"
+          >
+            <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+              <span
+                className={cn(
+                  "grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-md shadow-slate-200/50 sm:h-14 sm:w-14",
+                  item.tone,
+                )}
+              >
+                <item.Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+              </span>
+              <div className="min-w-0">
+                <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500 sm:text-xs">
+                  {item.label}
+                </p>
+                <h2 className="mt-0.5 truncate text-base font-bold tracking-tight text-slate-950 sm:text-lg">
+                  {item.title}
+                </h2>
+              </div>
             </div>
-            <p style={{ 
-              fontSize: "0.75rem", 
-              textTransform: "uppercase", 
-              letterSpacing: "0.05em", 
-              color: "#6b7280",
-              fontWeight: "600",
-              margin: "0"
-            }}>
-              Latest Weight
-            </p>
-          </div>
-          <p style={{ 
-            fontSize: "2rem", 
-            fontWeight: "700", 
-            color: "#111827",
-            margin: "0",
-            lineHeight: "1",
-            display: "flex",
-            alignItems: "baseline",
-            gap: "0.35rem"
-          }}>
-            <span>{stats?.latestWeight != null ? stats.latestWeight : "-"}</span>
-            {stats?.latestWeight != null && (
-              <span style={{ fontSize: "0.9rem", color: "#6b7280", fontWeight: "500" }}>kg</span>
-            )}
-          </p>
-        </div>
-
-        <div style={{
-          background: "linear-gradient(135deg, #dcfce7 0%, #f0fdf4 70%, #ffffff 100%)",
-          borderRadius: "1rem",
-          border: "1px solid #bbf7d0",
-          padding: "1.25rem",
-          boxShadow: "0 4px 12px rgba(34, 197, 94, 0.1)",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <div style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #22c55e, #16a34a)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1.25rem"
-            }}>
-              📐
+            <div className="shrink-0 text-3xl font-bold leading-none tracking-tight text-slate-950 sm:text-4xl">
+              {item.value}
             </div>
-            <p style={{ 
-              fontSize: "0.75rem", 
-              textTransform: "uppercase", 
-              letterSpacing: "0.05em", 
-              color: "#6b7280",
-              fontWeight: "600",
-              margin: "0"
-            }}>
-              Latest BMI
-            </p>
           </div>
-          <p style={{ 
-            fontSize: "2rem", 
-            fontWeight: "700", 
-            color: "#111827",
-            margin: "0",
-            lineHeight: "1"
-          }}>
-            {stats?.latestBMI ?? "-"}
-          </p>
-        </div>
-
-        <div style={{
-          background: "linear-gradient(135deg, #fef3c7 0%, #fffbeb 70%, #ffffff 100%)",
-          borderRadius: "1rem",
-          border: "1px solid #fcd34d",
-          padding: "1.25rem",
-          boxShadow: "0 4px 12px rgba(217, 119, 6, 0.1)",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.75rem" }}>
-            <div style={{
-              width: "40px",
-              height: "40px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #f59e0b, #d97706)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1.25rem"
-            }}>
-              ❤️
-            </div>
-            <p style={{ 
-              fontSize: "0.75rem", 
-              textTransform: "uppercase", 
-              letterSpacing: "0.05em", 
-              color: "#6b7280",
-              fontWeight: "600",
-              margin: "0"
-            }}>
-              Blood Pressure
-            </p>
-          </div>
-          <p style={{ 
-            fontSize: "2rem", 
-            fontWeight: "700", 
-            color: "#111827",
-            margin: "0",
-            lineHeight: "1",
-            display: "flex",
-            alignItems: "baseline",
-            gap: "0.35rem"
-          }}>
-            <span>{stats?.bloodPressureSystolic != null && stats?.bloodPressureDiastolic != null
-              ? `${Math.round(stats.bloodPressureSystolic)}/${Math.round(stats.bloodPressureDiastolic)}`
-              : "-"}</span>
-            {stats?.bloodPressureSystolic != null && stats?.bloodPressureDiastolic != null && (
-              <span style={{ fontSize: "0.9rem", color: "#6b7280", fontWeight: "500" }}>mmHg</span>
-            )}
-          </p>
-        </div>
+        ))}
       </div>
     </section>
   );

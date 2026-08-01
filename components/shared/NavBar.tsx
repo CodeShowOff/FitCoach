@@ -78,8 +78,8 @@ const Navbar = React.memo(function Navbar() {
 
   const clientLinks = [
     { label: "Dashboard", href: "/client/dashboard", icon: LayoutDashboard },
-    { label: "Plan", href: "/client/subscriptions", icon: CreditCard },
     { label: "Chat", href: "/client/chat", icon: MessageSquare },
+    { label: "Plan", href: "/client/subscriptions", icon: CreditCard },
     { label: "Progress", href: "/client/progress", icon: LineChart },
     { label: "Products", href: "/client/products", icon: Package },
   ];
@@ -262,7 +262,7 @@ const Navbar = React.memo(function Navbar() {
                       router.push("/footer-pages/contact");
                     }}
                   >
-                    Help
+                    Help Section
                   </button>
                   <div className="navbar-modern__dropdown-divider" />
                   <button

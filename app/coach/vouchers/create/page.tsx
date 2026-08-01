@@ -5,6 +5,13 @@ import api from "@/lib/axios";
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { motion } from "@/lib/motion";
+import { Card, CardHeader } from "@/components/ui/card";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+};
 
 // Simple types for clients and API responses
  type CoachClient = {
@@ -64,15 +71,30 @@ export default function CoachCreateVoucherPage() {
   });
 
   return (
-    <div className="admin-page">
-      <section className="admin-page-header">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div>
-            <h1 className="admin-page-header__title">Create Voucher</h1>
-          </div>
-          <Link href="/coach/products" className="btn btn--outline">Back</Link>
-        </div>
-      </section>
+    <div className="admin-page space-y-5 pt-4 md:pt-6">
+      <motion.section
+        variants={fadeInUp}
+        initial="initial"
+        animate="animate"
+        transition={{ duration: 0.28 }}
+      >
+        <Card className="overflow-hidden border-indigo-100/70 bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-600 text-white">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <h1 className="text-lg font-bold tracking-tight text-white sm:text-3xl">
+                Create Voucher
+              </h1>
+              <Link
+                href="/coach/products"
+                className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-medium h-10 px-4 py-2 shadow-sm transition-all duration-200"
+                style={{ backgroundColor: "white", color: "#4f46e5" }}
+              >
+                Back
+              </Link>
+            </div>
+          </CardHeader>
+        </Card>
+      </motion.section>
 
       <div className="admin-card">
         <form

@@ -223,7 +223,7 @@ export default function WaterIntakeWidget({ compact = false }: WaterIntakeWidget
 
   const ringSize = compact ? "h-36 w-36" : "h-[min(74vw,15rem)] w-[min(74vw,15rem)] sm:h-64 sm:w-64";
 
-  const ringStrokeWidth = compact ? 15 : 19;
+  const ringStrokeWidth = compact ? 18 : 24;
   const ringCenter = 120;
   const ringRadius = 94;
   const circumference = 2 * Math.PI * ringRadius;
@@ -238,7 +238,7 @@ export default function WaterIntakeWidget({ compact = false }: WaterIntakeWidget
   return (
     <>
       <div
-        className={`relative overflow-hidden rounded-2xl border border-sky-100/80 bg-gradient-to-br from-sky-50 via-white to-cyan-50 ${
+        className={`relative overflow-hidden rounded-2xl border border-sky-100/80 ${
           shouldReduceEffects
             ? "shadow-[0_10px_20px_-20px_rgba(14,116,144,0.45)]"
             : "shadow-[0_20px_40px_-30px_rgba(14,116,144,0.55)]"
@@ -246,6 +246,11 @@ export default function WaterIntakeWidget({ compact = false }: WaterIntakeWidget
           compact ? "h-full p-3" : "p-4 sm:p-5"
         }`}
       >
+        <div 
+          className="absolute inset-0 bg-cover bg-center pointer-events-none z-0" 
+          style={{ backgroundImage: "url('/images/dashboard/bg-water-mono.webp')" }}
+        />
+        <div className="absolute inset-0 bg-white/40 pointer-events-none z-[1]" />
         {!compact ? (
           <>
             <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-sky-200/35 blur-3xl" />
@@ -278,7 +283,7 @@ export default function WaterIntakeWidget({ compact = false }: WaterIntakeWidget
                 className={`mx-auto ${ringSize} rounded-full border border-sky-200/70 ${compact ? "" : "animate-pulse"}`}
                 style={{ borderWidth: ringStrokeWidth }}
               />
-              <div className={`border-t border-sky-100/80 pt-2 ${compact ? "text-center" : "text-left"}`}>
+              <div className="border-t border-sky-100/80 pt-2 text-center">
                 <div className={`h-[58px] rounded-xl bg-sky-100/75 ${compact ? "" : "animate-pulse"}`} />
               </div>
             </div>
@@ -379,7 +384,7 @@ export default function WaterIntakeWidget({ compact = false }: WaterIntakeWidget
                 </div>
               </div>
 
-              <div className={`border-t border-sky-100/80 pt-2 ${compact ? "text-center" : "text-left"}`}>
+              <div className="border-t border-sky-100/80 pt-2 text-center">
                 <div className="min-w-0">
                   <p className={compact ? "text-[10px] font-semibold leading-tight text-slate-500" : "text-[11px] font-medium uppercase tracking-wide text-slate-500"}>
                     Remaining

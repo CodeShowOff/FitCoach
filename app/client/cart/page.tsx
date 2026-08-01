@@ -5,7 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import { useCartStore } from "@/lib/cartStore";
 import { useAuthStore } from "@/lib/store";
+import { motion } from "@/lib/motion";
+import { Card, CardHeader } from "@/components/ui/card";
 
+const fadeInUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+};
 type Voucher = {
   code: string;
   name: string;
@@ -30,47 +36,46 @@ export default function MyCartPage() {
 
   return (
     <div className="client-page__sections">
-      <header
-        className="client-page__header"
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "0.75rem",
-          flexWrap: "wrap",
-          width: "100%",
-          textAlign: "left",
-        }}
+      <motion.section
+        variants={fadeInUp}
+        initial="initial"
+        animate="animate"
+        transition={{ duration: 0.28 }}
       >
-        <div>
-          <h1 className="client-page__title">My Cart</h1>
-        </div>
-        {role === "client" && (
-          <div style={{ minWidth: 220 }}>
-            <select
-              className="auth-form__input"
-              value={selectedVoucherCode || ""}
-              onChange={(e) => {
-                const code = e.target.value || null;
-                if (!code) {
-                  setVoucher(null, null);
-                  return;
-                }
-                const v = vouchersQuery.data?.data?.find((x) => x.code === code) || null;
-                setVoucher(v?.code || null, v?.discountPercent ?? null);
-              }}
-            >
-              <option value="">Apply Voucher</option>
-              {vouchersQuery.data?.data?.map((v) => (
-                <option key={v.code} value={v.code}>
-                  {v.name} ({v.discountPercent}% off)
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-      </header>
+        <Card className="overflow-hidden border-indigo-100/70 bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-600 text-white">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <h1 className="text-lg font-bold tracking-tight text-white sm:text-3xl">
+                My Cart
+              </h1>
+              {role === "client" && (
+                <div>
+                  <select
+                    className="auth-form__input text-slate-900"
+                    value={selectedVoucherCode || ""}
+                    onChange={(e) => {
+                      const code = e.target.value || null;
+                      if (!code) {
+                        setVoucher(null, null);
+                        return;
+                      }
+                      const v = vouchersQuery.data?.data?.find((x) => x.code === code) || null;
+                      setVoucher(v?.code || null, v?.discountPercent ?? null);
+                    }}
+                  >
+                    <option value="">Apply Voucher</option>
+                    {vouchersQuery.data?.data?.map((v) => (
+                      <option key={v.code} value={v.code}>
+                        {v.name} ({v.discountPercent}% off)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          </CardHeader>
+        </Card>
+      </motion.section>
       <div className="client-card">
         <CartSummary />
       </div>

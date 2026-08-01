@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import Image from "next/image";
 import {
   CLIENT_SUBSCRIPTIONS_KEY,
   CURRENT_PLAN_KEY,
@@ -308,31 +309,52 @@ export default function ClientSubscriptionsPage() {
         initial="initial"
         animate="animate"
         transition={{ duration: 0.28, delay: 0.1 }}
-        className="grid grid-cols-2 items-stretch overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95"
       >
-        <Link
-          href="/client/workouts"
-          className="group block h-full min-h-[136px] cursor-pointer select-none p-2.5 transition-colors duration-200 hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2 md:min-h-[148px] md:p-3"
-        >
-          <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-center">
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 text-white shadow-md transition-transform duration-200 group-hover:scale-[1.03]">
-              <Dumbbell className="h-7 w-7" />
-            </span>
-            <p className="mt-1 text-sm font-semibold leading-tight text-slate-900 md:text-base">Workouts Plan</p>
-          </div>
-        </Link>
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <Link
+            href="/client/workouts"
+            className="group block h-full cursor-pointer select-none overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_38px_rgba(15,23,42,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2"
+          >
+            <article className="flex h-full min-h-[164px] flex-col">
+              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 sm:aspect-[21/9] xl:aspect-[3/1]">
+                <Image
+                  src="/images/dashboard/client-workout.webp"
+                  alt="A sleek modern kettlebell and a folded gym towel on a vibrant orange background"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+                />
+              </div>
+              <div className="flex min-h-[62px] flex-1 flex-col justify-center px-3 py-2.5 sm:min-h-[82px] sm:px-5 sm:py-4">
+                <h2 className="text-sm font-bold tracking-tight text-slate-950 sm:text-lg">
+                  Workouts Plan
+                </h2>
+              </div>
+            </article>
+          </Link>
 
-        <Link
-          href="/client/diet"
-          className="group block h-full min-h-[136px] cursor-pointer select-none border-l border-slate-200/80 p-2.5 transition-colors duration-200 hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2 md:min-h-[148px] md:p-3"
-        >
-          <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-center">
-            <span className="grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-md transition-transform duration-200 group-hover:scale-[1.03]">
-              <UtensilsCrossed className="h-7 w-7" />
-            </span>
-            <p className="mt-1 text-sm font-semibold leading-tight text-slate-900 md:text-base">Diet Plan</p>
-          </div>
-        </Link>
+          <Link
+            href="/client/diet"
+            className="group block h-full cursor-pointer select-none overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_38px_rgba(15,23,42,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2"
+          >
+            <article className="flex h-full min-h-[164px] flex-col">
+              <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 sm:aspect-[21/9] xl:aspect-[3/1]">
+                <Image
+                  src="/images/dashboard/client-diet.webp"
+                  alt="A healthy, colorful meal prep bowl on a fresh lime green background"
+                  fill
+                  sizes="(max-width: 768px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.035]"
+                />
+              </div>
+              <div className="flex min-h-[62px] flex-1 flex-col justify-center px-3 py-2.5 sm:min-h-[82px] sm:px-5 sm:py-4">
+                <h2 className="text-sm font-bold tracking-tight text-slate-950 sm:text-lg">
+                  Diet Plan
+                </h2>
+              </div>
+            </article>
+          </Link>
+        </div>
       </motion.section>
 
       <motion.section

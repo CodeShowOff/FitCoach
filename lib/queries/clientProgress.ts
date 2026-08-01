@@ -45,8 +45,7 @@ export const CLIENT_PROGRESS_BY_ID_QUERY_KEY = (clientId: string) =>
 export type ClientProgressSummary = {
   latestWeight: number | null;
   latestBMI: number | null;
-  bloodPressureSystolic: number | null;
-  bloodPressureDiastolic: number | null;
+  latestMetabolicAge: number | null;
 };
 
 export async function fetchClientProgressEntries(): Promise<{
@@ -77,7 +76,6 @@ export async function fetchClientProgressSummary(): Promise<ClientProgressSummar
   return {
     latestWeight: summary.latestWeight ?? null,
     latestBMI: summary.latestBMI ?? null,
-    bloodPressureSystolic: summary.bloodPressureSystolic ?? null,
-    bloodPressureDiastolic: summary.bloodPressureDiastolic ?? null,
+    latestMetabolicAge: summary.latestMetabolicAge ?? null,
   };
 }

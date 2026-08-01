@@ -51,16 +51,7 @@ const CartSummary = React.memo(function CartSummary() {
 
   return (
     <aside>
-      <div className="client-card__header" style={{ marginBottom: "0.75rem" }}>
-        <div>
-          <p className="client-card__title">My Cart</p>
-          <p className="client-card__subtitle" style={{ fontSize: "0.78rem" }}>
-            {coachId
-              ? "Orders are sent directly to your coach."
-              : "Add products from your coach to create an order."}
-          </p>
-        </div>
-      </div>
+
       {items.length === 0 ? (
 				<p className="client-card__subtitle">You have not added any products yet.</p>
 			) : (

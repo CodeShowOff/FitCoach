@@ -4,6 +4,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/axios";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
+import { motion } from "@/lib/motion";
+import {
+  Card,
+  CardHeader,
+} from "@/components/ui/card";
+
+const fadeInUp = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+};
 
 type Voucher = {
   _id: string;
@@ -105,17 +115,31 @@ export default function CoachVouchersPage() {
   };
 
   return (
-    <div>
-      <section className="admin-page-header">
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-          <div>
-            <h1 className="admin-page-header__title coach-page-header__title">Vouchers</h1>
-          </div>
-          <div>
-            <Link href="/coach/vouchers/create" className="btn btn--primary">Create Voucher</Link>
-          </div>
-        </div>
-      </section>
+    <div className="space-y-5 pt-4 md:pt-6">
+      <motion.section
+        variants={fadeInUp}
+        initial="initial"
+        animate="animate"
+        transition={{ duration: 0.28 }}
+      >
+        <Card className="overflow-hidden border-indigo-100/70 bg-gradient-to-br from-indigo-600 via-blue-600 to-violet-600 text-white">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <h1 className="text-lg font-bold tracking-tight text-white sm:text-3xl">
+                Vouchers
+              </h1>
+
+              <Link
+                href="/coach/vouchers/create"
+                className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-xl text-sm font-medium h-10 px-4 py-2 shadow-sm transition-all duration-200"
+                style={{ backgroundColor: "white", color: "#4f46e5" }}
+              >
+                Create Voucher
+              </Link>
+            </div>
+          </CardHeader>
+        </Card>
+      </motion.section>
 
       <div className="admin-card">
         {vouchersQuery.isLoading ? (
