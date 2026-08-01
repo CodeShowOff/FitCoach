@@ -1,8 +1,6 @@
 desktop.ini
 node_modules/
 .env
-.env.production
-.env.development.local
 .next/
 
 # PWA generated files
