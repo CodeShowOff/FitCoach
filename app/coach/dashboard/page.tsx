@@ -1,9 +1,9 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store";
 import api from "@/lib/axios";
@@ -11,38 +11,17 @@ import {
   AlertCircle,
   Clock,
   Copy,
-  Dumbbell,
   ExternalLink,
   FileText,
   Link2,
   Package,
-  Star,
   MessageSquare,
   UserCircle2,
   Users,
-  UtensilsCrossed,
-  CreditCard,
-  Wallet,
 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const CoachProgressTrendCard = dynamic(() => import("@/components/coach/CoachProgressTrendCard"), {
-  ssr: false,
-  loading: () => (
-    <Card className="h-full border-slate-200/80 bg-white/95">
-      <CardContent className="p-4">
-        <p className="text-sm text-slate-500">Loading chart data...</p>
-      </CardContent>
-    </Card>
-  ),
-});
-
-type ProgressPoint = {
-  week: string;
-  avgBMI: number;
-};
 
 type CoachStats = {
   clients: number;
@@ -72,92 +51,63 @@ interface SubscriptionStatus {
 
 const DASHBOARD_ACTIONS = [
   {
-    label: "Visit My Profile",
-    description: "Profile",
+    label: "Profile",
+    description: "Showcase your coaching brand",
     href: "/profile",
-    Icon: UserCircle2,
-    color: "from-sky-500 to-cyan-500",
+    image: "/images/dashboard/coach-card-profile.webp",
+    imageAlt: "Athletic fitness coach against a cyan background",
   },
   {
-    label: "Platform Fee",
-    description: "Platform",
+    label: "Platform",
+    description: "Manage your FitCoach access",
     href: "/coach/platform-fee",
-    Icon: CreditCard,
-    color: "from-indigo-500 to-blue-500",
+    image: "/images/dashboard/coach-card-platform.webp",
+    imageAlt: "Laptop and tablet with abstract analytics on a blue background",
   },
   {
     label: "Workouts",
-    description: "Workouts",
+    description: "Create training plans",
     href: "/coach/workout-plans",
-    Icon: Dumbbell,
-    color: "from-orange-500 to-amber-500",
+    image: "/images/dashboard/coach-card-workouts.webp",
+    imageAlt: "Dumbbell on a neon green studio background",
   },
   {
     label: "Nutrition",
-    description: "Nutrition",
+    description: "Build meal plans",
     href: "/coach/diet-plans",
-    Icon: UtensilsCrossed,
-    color: "from-emerald-500 to-lime-500",
+    image: "/images/dashboard/coach-card-nutrition.webp",
+    imageAlt: "Healthy protein bowl on a fresh green background",
   },
   {
     label: "Revenue",
-    description: "Revenue",
+    description: "Track your earnings",
     href: "/coach/earnings",
-    Icon: Wallet,
-    color: "from-violet-500 to-fuchsia-500",
+    image: "/images/dashboard/coach-card-revenue.webp",
+    imageAlt: "Wallet and cards on a purple and pink background",
   },
   {
     label: "Reviews",
-    description: "Reviews",
+    description: "See client feedback",
     href: "/coach/reviews",
-    Icon: Star,
-    color: "from-rose-500 to-pink-500",
+    image: "/images/dashboard/coach-card-reviews.webp",
+    imageAlt: "Gold rating star and blank review cards on an orange background",
   },
 ] as const;
 
 const MODULE_ACTION_ORDER: Record<string, number> = {
   Workouts: 1,
   Nutrition: 2,
-  "Platform Fee": 3,
+  Platform: 3,
   Revenue: 4,
-  "Visit My Profile": 5,
+  Profile: 5,
   Reviews: 6,
 };
-
-const EMPTY_PROGRESS_DATA: ProgressPoint[] = [];
 
 export default function CoachDashboard() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
-  const [shouldRenderChart, setShouldRenderChart] = useState(false);
-  const chartSectionRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (shouldRenderChart) return;
-
-    const node = chartSectionRef.current;
-    if (!node || typeof IntersectionObserver === "undefined") {
-      setShouldRenderChart(true);
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const hasVisibleEntry = entries.some((entry) => entry.isIntersecting);
-        if (hasVisibleEntry) {
-          setShouldRenderChart(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: "240px 0px" },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [shouldRenderChart]);
-
   const { data: subscription } = useQuery<SubscriptionStatus>({
     queryKey: ["platformSubscription"],
     queryFn: async () => {
@@ -173,16 +123,6 @@ export default function CoachDashboard() {
       const res = await api.get("/coach/stats");
       return res.data;
     },
-  });
-
-  const { data: progressData, isLoading: progressLoading } = useQuery<ProgressPoint[]>({
-    queryKey: ["coachProgress"],
-    queryFn: async () => {
-      const res = await api.get("/coach/client-progress");
-      return (res.data ?? []) as ProgressPoint[];
-    },
-    enabled: shouldRenderChart,
-    staleTime: 60_000,
   });
 
   const { data: clients, isLoading: clientsLoading } = useQuery<CoachClient[]>({
@@ -223,18 +163,21 @@ export default function CoachDashboard() {
   const kpis = useMemo(
     () => [
       {
-        title: "Clients",
+        label: "Clients",
+        title: "Active Clients",
         value: statsLoading ? "--" : `${stats?.clients ?? 0}`,
         Icon: Users,
         tone: "from-blue-500 to-indigo-500",
       },
       {
-        title: "Plans",
+        label: "Plans",
+        title: "Active Plans",
         value: statsLoading ? "--" : `${stats?.plans ?? 0}`,
         Icon: FileText,
         tone: "from-violet-500 to-fuchsia-500",
       },
       {
+        label: "Products",
         title: "Products",
         value: statsLoading ? "--" : `${stats?.products ?? 0}`,
         Icon: Package,
@@ -243,8 +186,6 @@ export default function CoachDashboard() {
     ],
     [statsLoading, stats?.clients, stats?.plans, stats?.products],
   );
-
-  const chartData = progressData?.length ? progressData : EMPTY_PROGRESS_DATA;
 
   return (
     <div className="mx-auto w-full max-w-[1640px] space-y-5 pt-2 md:pt-3 min-h-screen">
@@ -364,34 +305,34 @@ export default function CoachDashboard() {
                     </h2>
                   </div> */}
 
-                  <div className="grid grid-cols-2 items-stretch overflow-hidden rounded-2xl border border-slate-200/80 bg-white/95 xl:grid-cols-3">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-3">
                     {moduleActions.map((item, index) => (
                       <Link
                         key={item.label}
                         href={item.href}
-                        className={cn(
-                          "group block h-full min-h-[136px] cursor-pointer select-none p-2.5 transition-colors duration-200 hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2 md:min-h-[148px] md:p-3",
-                          index % 2 === 1 && "border-l border-slate-200/80",
-                          index >= 2 && "border-t border-slate-200/80",
-                          index % 3 !== 0 ? "xl:border-l" : "xl:border-l-0",
-                          index >= 3 ? "xl:border-t" : "xl:border-t-0",
-                          "xl:border-slate-200/80",
-                        )}
+                        className="group block h-full cursor-pointer select-none overflow-hidden rounded-[22px] border border-slate-200/80 bg-white shadow-[0_10px_30px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-[0_18px_38px_rgba(15,23,42,0.14)] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 focus-visible:ring-offset-2"
                       >
-                        <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-center">
-                          <span
-                            className={cn(
-                              "grid h-14 w-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br text-white shadow-md",
-                              item.color,
-                            )}
-                          >
-                            <item.Icon className="h-7 w-7" />
-                          </span>
-
-                          <p className="mt-1 text-sm font-semibold leading-tight text-slate-900 md:text-base">
-                            {item.description}
-                          </p>
-                        </div>
+                        <article className="flex h-full min-h-[164px] flex-col sm:min-h-[244px]">
+                          <div className="relative aspect-[4/3] overflow-hidden bg-slate-100 sm:aspect-video">
+                            <Image
+                              src={item.image}
+                              alt={item.imageAlt}
+                              fill
+                              preload={index === 0}
+                              loading={index === 0 ? "eager" : "lazy"}
+                              sizes="(max-width: 639px) calc(50vw - 1.25rem), (max-width: 1279px) calc(50vw - 2rem), 33vw"
+                              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.035]"
+                            />
+                          </div>
+                          <div className="flex min-h-[62px] flex-1 flex-col justify-center px-3 py-2.5 sm:min-h-[82px] sm:px-5 sm:py-4">
+                            <h2 className="text-sm font-bold tracking-tight text-slate-950 sm:text-lg">
+                              {item.label}
+                            </h2>
+                            <p className="mt-0.5 text-[11px] leading-tight text-slate-500 sm:text-sm">
+                              {item.description}
+                            </p>
+                          </div>
+                        </article>
                       </Link>
                     ))}
                   </div>
@@ -401,12 +342,12 @@ export default function CoachDashboard() {
 
             <div>
               <div className="grid grid-cols-1 items-stretch gap-3">
-                <Card className="h-full border-slate-200/80 bg-white/95">
+                <Card className="h-full border-sky-200/80 bg-sky-50/80">
                   <CardContent className="flex h-full min-h-[120px] flex-col justify-center px-4 pb-4 pt-4 sm:min-h-[140px] sm:px-6 sm:pb-5 sm:pt-5">
                     <div className="flex h-full flex-col gap-3">
                       <div className="flex items-center gap-2">
-                        <Link2 className="h-4 w-4 text-slate-400" />
-                        <p className="text-sm font-semibold uppercase leading-tight tracking-wide text-slate-500 sm:text-base">
+                        <Link2 className="h-4 w-4 text-sky-600" />
+                        <p className="text-sm font-semibold uppercase leading-tight tracking-wide text-sky-700 sm:text-base">
                           Invite code
                         </p>
                       </div>
@@ -419,7 +360,7 @@ export default function CoachDashboard() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-10 w-full gap-2 rounded-md border-slate-200 text-slate-700 shadow-sm hover:bg-white focus-visible:ring-2 focus-visible:ring-slate-200"
+                          className="h-10 w-full gap-2 rounded-md border-sky-200 bg-white/80 text-sky-700 shadow-sm hover:bg-sky-100 focus-visible:ring-2 focus-visible:ring-sky-200"
                           onClick={async () => {
                             if (!referralCode) return;
                             try {
@@ -441,12 +382,12 @@ export default function CoachDashboard() {
                   </CardContent>
                 </Card>
 
-                <Card className="h-full border-slate-200/80 bg-white/95">
+                <Card className="h-full border-blue-200/80 bg-blue-50/80">
                   <CardContent className="flex h-full min-h-[120px] flex-col justify-center px-4 pb-4 pt-4 sm:min-h-[140px] sm:px-6 sm:pb-5 sm:pt-5">
                     <div className="flex h-full flex-col gap-3">
                       <div className="flex items-center gap-2">
-                        <UserCircle2 className="h-4 w-4 text-slate-400" />
-                        <p className="text-sm font-semibold uppercase leading-tight tracking-wide text-slate-500 sm:text-base">
+                        <UserCircle2 className="h-4 w-4 text-sky-600" />
+                        <p className="text-sm font-semibold uppercase leading-tight tracking-wide text-sky-700 sm:text-base">
                           Public profile
                         </p>
                       </div>
@@ -457,7 +398,7 @@ export default function CoachDashboard() {
                         <Button
                           size="sm"
                           variant="outline"
-                          className="h-10 flex-1 gap-2 rounded-md border-slate-200 text-slate-700 shadow-sm hover:bg-white focus-visible:ring-2 focus-visible:ring-slate-200"
+                          className="h-10 flex-1 gap-2 rounded-md border-blue-200 bg-white/80 text-slate-950 shadow-sm hover:bg-blue-100 focus-visible:ring-2 focus-visible:ring-blue-200"
                           disabled={!publicProfileUrl}
                           onClick={async () => {
                             if (!publicProfileUrl) return;
@@ -488,7 +429,7 @@ export default function CoachDashboard() {
                           <Button
                             size="sm"
                             variant="outline"
-                            className="h-10 w-full gap-2 rounded-md border-slate-200 text-slate-700 shadow-sm hover:bg-white focus-visible:ring-2 focus-visible:ring-slate-200"
+                            className="h-10 w-full gap-2 rounded-md border-blue-200 bg-white/80 text-slate-950 shadow-sm hover:bg-blue-100 focus-visible:ring-2 focus-visible:ring-blue-200"
                             disabled={!publicProfileUrl}
                           >
                             <ExternalLink className="h-4 w-4" />
@@ -502,58 +443,39 @@ export default function CoachDashboard() {
               </div>
             </div>
 
-            <section className="grid grid-cols-1 items-stretch gap-3">
-              {kpis.map((item, index) => (
-                <div key={item.title}>
-                  <Card className="h-full border-slate-200/80 bg-white/95">
-                    <CardContent className="flex h-full min-h-[120px] flex-col justify-center px-4 pb-4 pt-4 sm:min-h-[140px] sm:px-6 sm:pb-5 sm:pt-5">
-                      <div className="flex h-full flex-col gap-3">
-                        <p className="text-sm font-semibold uppercase leading-tight tracking-wide text-slate-500 sm:text-base">
-                          {item.title}
-                        </p>
-                        <div className="mt-auto flex items-center justify-between gap-3">
-                          <span
-                            className={cn(
-                              "grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white",
-                              item.tone,
-                            )}
-                          >
-                            <item.Icon className="h-6 w-6" />
-                          </span>
-                          <p className="text-4xl font-bold leading-none text-slate-900">
-                            {item.value}
+            <section>
+              <Card className="overflow-hidden border-slate-200/80 bg-white/95">
+                <CardContent className="divide-y divide-slate-200/80 !p-0">
+                  {kpis.map((item) => (
+                    <div
+                      key={item.title}
+                      className="flex min-h-[96px] items-center justify-between gap-4 px-5 py-4 sm:min-h-[112px] sm:py-5"
+                    >
+                      <div className="flex min-w-0 items-center gap-3 sm:gap-4">
+                        <span
+                          className={cn(
+                            "grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-md shadow-slate-200/50 sm:h-14 sm:w-14",
+                            item.tone,
+                          )}
+                        >
+                          <item.Icon className="h-6 w-6 sm:h-7 sm:w-7" />
+                        </span>
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-slate-500 sm:text-xs">
+                            {item.label}
                           </p>
+                          <h2 className="mt-0.5 truncate text-base font-bold tracking-tight text-slate-950 sm:text-lg">
+                            {item.title}
+                          </h2>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </section>
-
-            <section>
-              <div ref={chartSectionRef}>
-                {shouldRenderChart ? (
-                  <CoachProgressTrendCard
-                    chartData={chartData}
-                    isLoading={progressLoading}
-                  />
-                ) : (
-                  <Card className="h-full border-slate-200/80 bg-white/95">
-                    <CardHeader>
-                      <CardTitle className="text-base">
-                        Client progress trend
-                      </CardTitle>
-                      <CardDescription>
-                        Chart loads when visible to keep the dashboard snappy.
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-[280px] rounded-xl bg-slate-100" />
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
+                      <p className="shrink-0 text-3xl font-bold leading-none tracking-tight text-slate-950 sm:text-4xl">
+                        {item.value}
+                      </p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
             </section>
 
             <section>
@@ -579,7 +501,7 @@ export default function CoachDashboard() {
                     ) : (clients ?? []).length === 0 ? (
                       <p className="text-sm text-slate-500">No clients yet.</p>
                     ) : (
-                      <div className="space-y-2">
+                      <div className="divide-y divide-slate-200/80">
                         <div className="flex items-center justify-between px-1 text-xs uppercase tracking-wide text-slate-500">
                           <span>Name</span>
                           <span>Chat</span>
@@ -588,7 +510,7 @@ export default function CoachDashboard() {
                         {(clients ?? []).map((client) => (
                           <div
                             key={client._id}
-                            className="flex cursor-pointer items-center justify-between gap-2 rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2.5 text-slate-700 transition-colors hover:bg-slate-100/80"
+                            className="flex cursor-pointer items-center justify-between gap-2 px-1 py-3 text-slate-700 transition-colors hover:bg-slate-50/80"
                             tabIndex={0}
                             onClick={() =>
                               router.push(`/coach/clients/${client._id}`)
